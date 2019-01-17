@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "904816878564",
+    "firebase_url": "https://hostel-23d52.firebaseio.com",
+    "project_id": "hostel-23d52",
+    "storage_bucket": "hostel-23d52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904816878564:android:b872bc8cd3c90c7e",
+        "android_client_info": {
+          "package_name": "com.example.hostel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904816878564-q3ji16kkbdgrg0nl1l2s5t4sfue1e1gs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hostel",
+            "certificate_hash": "22c8119ace5497502611ae89368bad3844e69426"
+          }
+        },
+        {
+          "client_id": "904816878564-rfrs1abe6sj31hhs8lsq09tu9lkgfmai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQhFzcchgnw_U9kWHic_ESBgbQjLNzGL4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904816878564-rfrs1abe6sj31hhs8lsq09tu9lkgfmai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
