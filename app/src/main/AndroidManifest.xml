@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".UploadHostel"></activity>
+        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".UploadHostel" />
         <activity android:name=".HostelListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
