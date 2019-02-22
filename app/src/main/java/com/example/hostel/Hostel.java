@@ -31,4 +31,20 @@ class Hostel {
     public String getHostelCapacity() {
         return hostelCapacity;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setHostelName(String hostelName) {
+        this.hostelName = hostelName;
+    }
+
+    public void setHostelDescription(String hostelDescription) {
+        this.hostelDescription = hostelDescription;
+    }
+
+    public void setHostelCapacity(String hostelCapacity) {
+        this.hostelCapacity = hostelCapacity;
+    }
 }

@@ -7,23 +7,25 @@ public class NewUser {
 
     private String nUserName, nUserIdNumber, nUserEmail, nUserPhone, nStudentRegistration, nStudentCourse, nOwnerHostel, id;
 
-    public NewUser(String nUserName, String nUserIdNumber, String nUserEmail, String nUserPhone, String nStudentRegistration, String nStudentCourse,String id) {
+    public NewUser(String id, String nUserName, String nUserIdNumber, String nUserEmail, String nUserPhone, String nStudentRegistration, String nStudentCourse) {
+        this.id = id;
         this.nUserName = nUserName;
         this.nUserIdNumber = nUserIdNumber;
         this.nUserEmail = nUserEmail;
         this.nUserPhone = nUserPhone;
         this.nStudentRegistration = nStudentRegistration;
         this.nStudentCourse = nStudentCourse;
-        this.id = id;
+
     }
 
-    public NewUser(String nUserName, String nUserEmail, String nUserIdNumber, String nUserPhone, String nOwnerHostel,String id) {
+    public NewUser(String id, String nUserName, String nUserIdNumber, String nUserEmail, String nUserPhone, String nOwnerHostel) {
+        this.id = id;
         this.nUserName = nUserName;
         this.nUserIdNumber = nUserIdNumber;
         this.nUserEmail = nUserEmail;
         this.nUserPhone = nUserPhone;
         this.nOwnerHostel = nOwnerHostel;
-        this.id = id;
+
     }
 
     public String getnUserIdNumber() {
