@@ -16,9 +16,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".ViewHostelsActivity"></activity>
+        <activity
+            android:name=".UploadedOwnerActivity"
+            android:label="Uploaded Hostel" />
+        <activity android:name=".BookedStudent" />
+        <activity
+            android:name=".PaymentActivity"
+            android:label="Make Payment" />
+        <activity
+            android:name=".SignUpActivity"
+            android:label="Sign Up" />
         <activity android:name=".UploadHostel" />
-        <activity android:name=".HostelListActivity" />
+        <activity
+            android:name=".HostelListActivity"
+            android:label="View Hostels" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

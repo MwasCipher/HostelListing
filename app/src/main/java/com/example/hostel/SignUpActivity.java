@@ -9,25 +9,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    DatabaseReference nOwnerDatabaseReference, nStudentDatabaseReference;
+    String id;
+
+    boolean isOwner = false;
+
+    DatabaseReference nUserDatabaseReference;
     FirebaseAuth newUserAuth;
+    FirebaseUser firebaseUser;
 
     EditText userNameEdit, userEmailEdit, userPassword, userIDNumberEdit, userPhoneEdit, studentRegistrationEdit, studentCourseEdit, ownerHostelEdit;
+    TextView loginTV;
     RadioGroup radioGroup;
     RadioButton studentRbutton, ownerRbutton;
 
-    Button userSignUpButton;
+    Button ownerSignUpButton, studentSignUpButton;
 
     String newUserName, newUserEmail, newUserPassword, newUserPhone, newUserIDNumber, newSudentRegistration, newStudentCourse, newOwnerHostel, studentId, ownerId;
 
@@ -35,6 +43,10 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        newUserAuth = FirebaseAuth.getInstance();
+        firebaseUser = newUserAuth.getCurrentUser();
+
 
         userNameEdit = findViewById(R.id.nUserNameET);
         userEmailEdit = findViewById(R.id.nUserEmailET);
@@ -54,6 +66,35 @@ public class SignUpActivity extends AppCompatActivity {
         ownerHostelEdit.setEnabled(false);
         ownerHostelEdit.setVisibility(View.GONE);
 
+//        hostelPriceEdit = findViewById(R.id.hostelPriceET);
+//        hostelPriceEdit.setEnabled(false);
+//        hostelPriceEdit.setVisibility(View.GONE);
+
+        studentRbutton = findViewById(R.id.nStudentRadioButton);
+        ownerRbutton = findViewById(R.id.nOwnerRadioButton);
+
+        ownerSignUpButton = findViewById(R.id.ownerSignUpBtn);
+        studentSignUpButton = findViewById(R.id.studentSignUpBtn);
+
+        ownerSignUpButton.setEnabled(false);
+        ownerSignUpButton.setVisibility(View.GONE);
+
+        studentSignUpButton.setVisibility(View.GONE);
+        studentSignUpButton.setEnabled(false);
+
+        loginTV = findViewById(R.id.logInTextView);
+
+        newUserAuth = FirebaseAuth.getInstance();
+
+        loginTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openLogInActivity = new Intent(getApplicationContext(), MainActivity.class);
+                openLogInActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(openLogInActivity);
+            }
+        });
+
 
         radioGroup = findViewById(R.id.radioGroupSt_Ow);
 
@@ -63,18 +104,33 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (checkedId == R.id.nStudentRadioButton) {
 
+
+                    isOwner = false;
+
                     studentRegistrationEdit.setEnabled(true);
                     studentRegistrationEdit.setVisibility(View.VISIBLE);
                     studentCourseEdit.setEnabled(true);
                     studentCourseEdit.setVisibility(View.VISIBLE);
 
+                    ownerSignUpButton.setEnabled(false);
+                    ownerSignUpButton.setVisibility(View.GONE);
+
+                    studentSignUpButton.setVisibility(View.GONE);
+                    studentSignUpButton.setEnabled(false);
+
                     studentRegistrationEdit.requestFocus();
                     studentCourseEdit.requestFocus();
 
                     ownerHostelEdit.setEnabled(false);
+//                    hostelPriceEdit.setEnabled(false);
+
+//                    hostelPriceEdit.getText().clear();
+//                    ownerHostelEdit.getText().clear();
 
 
                 } else {
+
+                    isOwner = true;
 
                     studentRegistrationEdit.setEnabled(false);
                     studentRegistrationEdit.setVisibility(View.GONE);
@@ -88,23 +144,42 @@ public class SignUpActivity extends AppCompatActivity {
                     studentRegistrationEdit.getText().clear();
                     studentCourseEdit.getText().clear();
 
+                    ownerSignUpButton.setVisibility(View.VISIBLE);
+                    ownerSignUpButton.setEnabled(true);
+
 
                 }
 
 
                 if (checkedId == R.id.nOwnerRadioButton) {
 
+                    isOwner = true;
+
                     ownerHostelEdit.setEnabled(true);
                     ownerHostelEdit.setVisibility(View.VISIBLE);
+
+//                    hostelPriceEdit.setEnabled(true);
+//                    hostelPriceEdit.setVisibility(View.VISIBLE);
+
+                    studentSignUpButton.setVisibility(View.GONE);
+                    studentSignUpButton.setEnabled(false);
 
                     studentRegistrationEdit.getText().clear();
                     studentCourseEdit.getText().clear();
 
 
                 } else {
-
+                    isOwner = false;
                     ownerHostelEdit.setEnabled(false);
                     ownerHostelEdit.setVisibility(View.GONE);
+//                    hostelPriceEdit.setEnabled(false);
+//                    hostelPriceEdit.setVisibility(View.GONE);
+
+                    studentSignUpButton.setEnabled(true);
+                    studentSignUpButton.setVisibility(View.VISIBLE);
+
+//                    hostelPriceEdit.getText().clear();
+//                    ownerHostelEdit.getText().clear();
                 }
 
 
@@ -112,97 +187,50 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
 
-        studentRbutton = findViewById(R.id.nStudentRadioButton);
-        ownerRbutton = findViewById(R.id.nOwnerRadioButton);
-
-
-        userSignUpButton = findViewById(R.id.signUpBtn);
-
-        userSignUpButton.setOnClickListener(new View.OnClickListener() {
+        ownerSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (studentRbutton.isChecked()) {
-                    uploadNewStudent();
-
-                }
-
-                if (ownerRbutton.isChecked()) {
-
-                    uploadNewOwner();
-                }
-
-
+                uploadNewUser();
             }
         });
 
-    }
-
-    private void uploadNewStudent() {
-
-        newUserName = userNameEdit.getText().toString().trim();
-        newUserEmail = userEmailEdit.getText().toString().trim();
-        newUserPhone = userPhoneEdit.getText().toString().trim();
-        newUserIDNumber = userIDNumberEdit.getText().toString().trim();
-
-        newUserPassword = userPassword.getText().toString().trim();
-
-        newSudentRegistration = studentRegistrationEdit.getText().toString().trim();
-        newStudentCourse = studentCourseEdit.getText().toString().trim();
-
-        nStudentDatabaseReference = FirebaseDatabase.getInstance().getReference("student");
-
-        studentId = nStudentDatabaseReference.push().getKey();
-
-        NewUser newUser = new NewUser(studentId, newUserName, newUserEmail, newUserIDNumber, newUserPhone, newSudentRegistration, newStudentCourse);
-        assert studentId != null;
-        nStudentDatabaseReference.child(studentId).setValue(newUser);
-
-        Intent openHostelList = new Intent(getApplicationContext(), HostelListActivity.class);
-        openHostelList.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(openHostelList);
-
-        newUserAuth.createUserWithEmailAndPassword(newUserEmail, newUserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        studentSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                if (task.isSuccessful()) {
-
-                    Toast.makeText(SignUpActivity.this, newUserName + " Successfully Registered", Toast.LENGTH_LONG).show();
-
-                } else {
-
-                    Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
+            public void onClick(View v) {
+                uploadNewUser();
             }
         });
 
-
     }
 
-    private void uploadNewOwner() {
+//    private void uploadNewStudent() {
+//
+//        newUserName = userNameEdit.getText().toString().trim();
+//        newUserEmail = userEmailEdit.getText().toString().trim();
+//        newUserPhone = userPhoneEdit.getText().toString().trim();
+//        newUserIDNumber = userIDNumberEdit.getText().toString().trim();
+//
+//        newUserPassword = userPassword.getText().toString().trim();
+//
+//        newSudentRegistration = studentRegistrationEdit.getText().toString().trim();
+//        newStudentCourse = studentCourseEdit.getText().toString().trim();
+//
+//
+//    }
+
+    private void uploadNewUser() {
 
         newUserName = userNameEdit.getText().toString().trim();
         newUserEmail = userEmailEdit.getText().toString().trim();
         newUserPhone = userPhoneEdit.getText().toString().trim();
         newUserIDNumber = userIDNumberEdit.getText().toString().trim();
-
         newUserPassword = userPassword.getText().toString().trim();
+
 
         newOwnerHostel = ownerHostelEdit.getText().toString().trim();
 
-        nOwnerDatabaseReference = FirebaseDatabase.getInstance().getReference("owner");
-        ownerId = nOwnerDatabaseReference.push().getKey();
-
-        NewUser newOwnerUser = new NewUser(ownerId, newUserName, newUserIDNumber, newUserEmail, newUserPhone, newOwnerHostel);
-
-        assert ownerId != null;
-        nOwnerDatabaseReference.child(ownerId).setValue(newOwnerUser);
-
-        Intent openUploadPage = new Intent(getApplicationContext(), UploadHostel.class);
-        openUploadPage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(openUploadPage);
+        nUserDatabaseReference = FirebaseDatabase.getInstance().getReference("users");
 
 
         newUserAuth.createUserWithEmailAndPassword(newUserEmail, newUserPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -211,7 +239,35 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
 
+                    id = newUserAuth.getCurrentUser().getUid();
+
+                    if (isOwner) {
+
+                        NewUser newOwnerUser = new NewUser(id, "owner", newUserName, newUserIDNumber,
+                                newUserEmail, newUserPhone,  null, null, newOwnerHostel);
+
+
+                        nUserDatabaseReference.child(id).setValue(newOwnerUser);
+
+                        Intent openUploadPage = new Intent(getApplicationContext(), UploadHostel.class);
+                        openUploadPage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(openUploadPage);
+
+
+                    } else {
+                        NewUser newUser = new NewUser(id,"student", newUserName, newUserEmail, newUserIDNumber,
+                                newUserPhone, newSudentRegistration, newStudentCourse,null);
+
+                        assert id != null;
+                        nUserDatabaseReference.child(id).setValue(newUser);
+
+                        Intent openHostelList = new Intent(getApplicationContext(), ViewHostelsActivity.class);
+                        openHostelList.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(openHostelList);
+                    }
+
                     Toast.makeText(SignUpActivity.this, newUserName + " Successfully Registered", Toast.LENGTH_LONG).show();
+                    finish();
 
                 } else {
 
@@ -223,8 +279,6 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
 }

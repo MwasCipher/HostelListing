@@ -5,9 +5,13 @@ public class NewUser {
     public NewUser() {
     }
 
-    private String nUserName, nUserIdNumber, nUserEmail, nUserPhone, nStudentRegistration, nStudentCourse, nOwnerHostel, id;
+    private String nUserName, nUserIdNumber, nUserEmail, nUserPhone,
+            nStudentRegistration, nStudentCourse, nOwnerHostel, id;
+    private String userType;
 
-    public NewUser(String id, String nUserName, String nUserIdNumber, String nUserEmail, String nUserPhone, String nStudentRegistration, String nStudentCourse) {
+    public NewUser(String id, String userType,String nUserName, String nUserIdNumber, String nUserEmail, String nUserPhone,
+                   String nStudentRegistration, String nStudentCourse ,String nOwnerHostel) {
+
         this.id = id;
         this.nUserName = nUserName;
         this.nUserIdNumber = nUserIdNumber;
@@ -15,17 +19,28 @@ public class NewUser {
         this.nUserPhone = nUserPhone;
         this.nStudentRegistration = nStudentRegistration;
         this.nStudentCourse = nStudentCourse;
-
-    }
-
-    public NewUser(String id, String nUserName, String nUserIdNumber, String nUserEmail, String nUserPhone, String nOwnerHostel) {
-        this.id = id;
-        this.nUserName = nUserName;
-        this.nUserIdNumber = nUserIdNumber;
-        this.nUserEmail = nUserEmail;
-        this.nUserPhone = nUserPhone;
+        this.userType = userType;
         this.nOwnerHostel = nOwnerHostel;
 
+    }
+//    public NewUser(String id,String nUserName, String nUserIdNumber,
+//                   String nUserEmail, String nUserPhone, String nOwnerHostel, String userType) {
+//        this.id = id;
+//        this.nUserName = nUserName;
+//        this.nUserIdNumber = nUserIdNumber;
+//        this.nUserEmail = nUserEmail;
+//        this.nUserPhone = nUserPhone;
+//        this.nOwnerHostel = nOwnerHostel;
+//        this.userType = userType;
+//
+//    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public String getnUserIdNumber() {
@@ -71,6 +86,7 @@ public class NewUser {
     public String getnStudentCourse() {
         return nStudentCourse;
     }
+
 
     public void setnStudentCourse(String nStudentCourse) {
         this.nStudentCourse = nStudentCourse;
